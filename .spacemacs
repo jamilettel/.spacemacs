@@ -35,7 +35,9 @@ This function should only modify configuration layer settings."
    '(
      (typescript :variables
                  typescript-backend 'lsp
-                 typescript-lsp-linter 'eslint)
+                 typescript-lsp-linter 'eslint
+                 typescript-fmt-tool 'prettier
+                 )
      sql
      yaml
      ;; ----------------------------------------------------------------
@@ -71,7 +73,10 @@ This function should only modify configuration layer settings."
             )
      (csharp :variables csharp-backend 'lsp)
      html
-     (javascript :variables javascript-backend 'lsp)
+     (javascript :variables
+                 javascript-backend 'tide
+                 javascript-fmt-tool 'prettier
+                 node-add-modules-path t)
      react
      node
      cmake
@@ -80,6 +85,8 @@ This function should only modify configuration layer settings."
            lsp-dart-sdk-dir "/home/jamil/snap/flutter/common/flutter/bin/cache/dart-sdk"
            )
      docker
+     (java :variables
+           java-backend 'lsp)
      )
 
 
@@ -95,6 +102,7 @@ This function should only modify configuration layer settings."
                                       whole-line-or-region
                                       highlight-indent-guides
                                       ag
+                                      move-text
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -250,6 +258,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(sanityinc-tomorrow-night)
+   ;; dotspacemacs-themes '(flatland)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -550,7 +559,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq lsp-ui-doc-delay 10.0)
   (setq undo-tree-enable-undo-in-region t)
   (setq mc/always-run-for-all 1)
- )
+  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -590,7 +599,7 @@ before packages are loaded."
   (define-key evil-emacs-state-map (kbd "<f8>") 'treemacs)
   (define-key evil-emacs-state-map (kbd "C-c <right>") 'winner-redo)
   (define-key evil-emacs-state-map (kbd "C-c <left>") 'winner-undo)
-  (define-key evil-emacs-state-map (kbd "C-x y") 'company-yasnippet)
+  (define-key evil-emacs-state-map (kbd "C-'") 'company-yasnippet)
   (define-key evil-emacs-state-map (kbd "C-;") 'company-capf)
   (define-key evil-emacs-state-map (kbd "M-m p 4 f") 'projectile-find-file-other-window)
   (define-key evil-emacs-state-map (kbd "M-m p 4 a") 'projectile-find-other-file-other-window)
@@ -614,6 +623,9 @@ before packages are loaded."
   (setq lsp-enable-indentation nil)
   (setq ivy-more-chars-alist '((counsel-grep . 2) (t . 0)))
   (global-hl-line-mode -1)
+  (setq-default web-mode-comment-formats
+                '(("typescript" . "//")
+                  ("javascript" . "//")))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -632,8 +644,12 @@ This function is called at the very end of Spacemacs initialization."
    [default bold shadow italic underline bold bold-italic bold])
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
+ '(compilation-message-face 'default)
  '(evil-want-Y-yank-to-eol nil)
+ '(exwm-floating-border-color "#413f42")
  '(git-gutter-fr+-side 'left-fringe)
+ '(highlight-changes-colors '("#FD5FF0" "#AE81FF"))
+ '(highlight-tail-colors ((("#393b35") . 0) (("#343b40") . 20)))
  '(hl-todo-keyword-faces
    '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
@@ -650,16 +666,33 @@ This function is called at the very end of Spacemacs initialization."
      ("FIXME" . "#dc752f")
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
+ '(jdee-db-active-breakpoint-face-colors (cons "#19181A" "#FCFCFA"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#19181A" "#A9DC76"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#19181A" "#727072"))
+ '(lsp-javascript-preferences-import-module-specifier "non-relative")
+ '(lsp-javascript-preferences-quote-style "single")
+ '(lsp-javascript-update-imports-on-file-move-enabled "always")
+ '(lsp-typescript-preferences-import-module-specifier "non-relative")
+ '(lsp-typescript-preferences-quote-style "single")
+ '(magit-diff-use-overlays nil)
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+ '(objed-cursor-color "#CC6666")
  '(package-selected-packages
    '(dockerfile-mode docker tablist docker-tramp lsp-dart flutter dart-mode tide typescript-mode import-js grizzl add-node-modules-path sqlup-mode sql-indent yaml-mode omnisharp csharp-mode tree-sitter-langs tree-sitter-indent tree-sitter tsc ag cmake-mode phpunit php-extras helm-gtags ggtags geben drupal-mode counsel-gtags company-phpactor phpactor composer php-runtime company-php ac-php-core xcscope php-mode highlight-indent-guides web-mode web-beautify tagedit slim-mode scss-mode sass-mode rjsx-mode pug-mode prettier-js npm-mode nodejs-repl livid-mode skewer-mode json-navigator hierarchy json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc impatient-mode htmlize simple-httpd haml-mode emmet-mode counsel-css company-web web-completion-data ivy-rtags google-c-style flycheck-ycmd flycheck-rtags disaster cpp-auto-include company-ycmd ycmd request-deferred deferred company-rtags rtags company-c-headers ccls emojify emoji-cheat-sheet-plus company-emoji zenburn-theme zen-and-art-theme white-sand-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme rebecca-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme modus-vivendi-theme modus-operandi-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme kaolin-themes jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme eziam-theme exotica-theme espresso-theme dracula-theme doom-themes django-theme darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme chocolate-theme autothemer cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme rainbow-mode rainbow-identifiers color-identifiers-mode whole-line-or-region xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help dap-mode bui wgrep smex lsp-ivy ivy-yasnippet ivy-xref ivy-purpose ivy-hydra ivy-avy counsel-projectile counsel swiper ivy yasnippet-snippets unfill treemacs-magit smeargle mwim mmm-mode markdown-toc magit-svn magit-section magit-gitflow magit-popup lsp-ui lsp-treemacs lsp-origami origami helm-lsp lsp-mode helm-gitignore helm-git-grep helm-company helm-c-yasnippet gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gh-md fuzzy forge markdown-mode magit ghub closql emacsql-sqlite emacsql treepy git-commit with-editor transient flycheck-pos-tip pos-tip company browse-at-remote auto-yasnippet yasnippet ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs cfrs ht pfuture posframe toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons memoize all-the-icons spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump s dired-quick-sort devdocs define-word dash column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg dotenv-mode diminish bind-map bind-key async))
+ '(pdf-view-midnight-colors (cons "#FCFCFA" "#2D2A2E"))
+ '(pos-tip-background-color "#16211C")
+ '(pos-tip-foreground-color "#dcded9")
+ '(rustic-ansi-faces
+   ["#2D2A2E" "#CC6666" "#A9DC76" "#FFD866" "#78DCE8" "#FF6188" "#78DCE8" "#FCFCFA"])
  '(safe-local-variable-values
    '((js-jsx-indent-level . 2)
      (js-indent-level . 2)
      (javascript-backend . tide)
      (javascript-backend . tern)
-     (javascript-backend . lsp))))
+     (javascript-backend . lsp)))
+ '(weechat-color-list
+   '(unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
