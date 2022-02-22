@@ -627,6 +627,7 @@ before packages are loaded."
   (setq lsp-enable-indentation nil)
   (setq ivy-more-chars-alist '((counsel-grep . 2) (t . 0)))
   (global-hl-line-mode -1)
+  (setq-default tab-always-indent t)
   (setq-default web-mode-comment-formats
                 '(("typescript" . "//")
                   ("javascript" . "//")))
@@ -691,7 +692,8 @@ This function is called at the very end of Spacemacs initialization."
  '(rustic-ansi-faces
    ["#2D2A2E" "#CC6666" "#A9DC76" "#FFD866" "#78DCE8" "#FF6188" "#78DCE8" "#FCFCFA"])
  '(safe-local-variable-values
-   '((js-jsx-indent-level . 2)
+   '((lsp-enable-watcher . 1)
+     (js-jsx-indent-level . 2)
      (js-indent-level . 2)
      (javascript-backend . tide)
      (javascript-backend . tern)
