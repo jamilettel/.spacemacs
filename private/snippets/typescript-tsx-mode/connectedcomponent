@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: connectedcomponent
+# key: connectedcomponent
+# --
+import { RootState, useThunkDispatch } from '@/utils/store';
+import { connect, ConnectedProps } from 'react-redux';
+
+const mapStateToProps = (state: RootState) => {
+return {
+$0
+};
+}
+
+const connector = connect(mapStateToProps, {});
+
+function $1(props: ConnectedProps<typeof connector>) {
+const dispatch = useThunkDispatch();
+return (
+<>
+</>
+);
+}
+
+export default connector($1);

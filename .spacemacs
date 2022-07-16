@@ -37,8 +37,9 @@ This function should only modify configuration layer settings."
              python-backend 'lsp)
      (typescript :variables
                  typescript-backend 'lsp
-                 typescript-lsp-linter 'eslint
-                 typescript-fmt-tool 'prettier
+                 ;; typescript-lsp-linter 'eslint
+                 typescript-fmt-tool 'prettier-js
+                 typescript-fmt-on-save t
                  )
      sql
      yaml
@@ -634,6 +635,7 @@ before packages are loaded."
   (setq-default web-mode-comment-formats
                 '(("typescript" . "//")
                   ("javascript" . "//")))
+  ;; (setq counsel-find-file-ignore-regexp (regexp-opt '("./" "../" ".*.~undo-tree~")))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

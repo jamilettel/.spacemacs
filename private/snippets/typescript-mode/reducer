@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+# name: reducer
+# key: reducer
+# --
+import { BasicCall } from '@/utils/reducerUtils';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+interface $1State extends BasicCall {
+}
+
+const initialState: $1State = {
+loading: false,
+success: false,
+loaded: false,
+}
+
+const $1Slice = createSlice({
+name: '$0',
+initialState,
+reducers: {
+reset$1() {
+return initialState;
+}
+},
+extraReducers: builder => {
+}
+});
+
+export const { reset$1 } = $1Slice.actions;
+
+export default $1Slice.reducer;
